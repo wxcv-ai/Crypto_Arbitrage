@@ -25,7 +25,8 @@ to better understand what triangular arbitrage is you can watch this video (in t
 
 The architecturre :
 
-this project is decomposed into three parts :
+this project is decomposed into four  parts :
+all_pairs : which collects al the avaiable asset classes in the exchange and other necessary data stucture
 live feed : which takes the live orderbook prices from the exchange and store them in a database
 arbitrage modules : this is where the algoithmic part of the arbitrage function resides it cointaines the classes and functions that perform tasks such as : choose the oath od triangular arbitrage that cna make money , loop in diffrent prices , monitor the gap of the divergence between the prices , ...
 arbitrage_execution : this is the part where it uses the previous two to make a real time profit or loss for the triangular pairs that we chssen and notfy us when an opportunity comes into play
