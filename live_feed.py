@@ -13,15 +13,15 @@ print("started")
 class connection:
 
 	def handle_msg (self,mssg,ws) :
-		response =  ws.recv()
-		msg = json.loads(response)
+		self.response =  ws.recv()
+		self.msg = json.loads(self.response)
 		#print(msg)
 		if msg['m'] == 'bbo':
-			lowest_ask = msg['data']['ask']
-			highest_bid = msg['data']['bid']
-			order_book={}
-			order_book['ask'] = lowest_ask
-			order_book['bid'] = highest_bid
+			self.lowest_ask = msg['data']['ask']
+			self.highest_bid = msg['data']['bid']
+			self.order_book={}
+			self.order_book['ask'] = lowest_ask
+			self.order_book['bid'] = highest_bid
 			#DSN = "postgres://postgres:kirahavethedeathnote123A@localhost:5432/bitmax"
 			#conn = await asyncpg.connect(DSN)
 			#UPDATE_TABLE = 'UPDATE live_feed SET live_feed ='  +"'"+str(order_book).replace("'",'"')+ "'"+' WHERE pair =  ' + "'"+str(pair)+"'"
@@ -31,29 +31,29 @@ class connection:
 			#print(msg["symbol"])
 		if msg['m'] == 'ping':
 
-			ping_msg = {"op": "pong"}
-			ws.send(json.dumps(ping_msg))
-			print(ping_msg)		
+			self.ping_msg = {"op": "pong"}
+			ws.send(json.dumps(self.ping_msg))
+			print(self.ping_msg)		
 		return 0
 
 	def initiations(self,pair):
 
-		wbs_url = "wss://bitmax.io/1/api/pro/v1/stream"
-		ws = create_connection(wbs_url)
-		subscribe_msg= { "op": "sub", "id": str(pair) ,"ch":"bbo:"+pair+""}
-		ws.send(json.dumps(subscribe_msg))	
+		self.wbs_url = "wss://bitmax.io/1/api/pro/v1/stream"
+		self.ws = create_connection(wbs_url)
+		self.subscribe_msg= { "op": "sub", "id": str(pair) ,"ch":"bbo:"+pair+""}
+		self.ws.send(json.dumps(self.subscribe_msg))	
 		
-		connected = True 
-		while connected:
+		self.connected = True 
+		while self.connected:
 			try:
 				
-				response = ws.recv()
-				msg = json.loads(response)
+				self.response = ws.recv()
+				self.msg = json.loads(self.response)
 
-				connection().handle_msg(msg,ws)
+				connection().handle_msg(self.msg,self.ws)
 				time.sleep(2)		
 			except:
-				reloaded_pairs.append(pair)
+				self.reloaded_pairs.append(pair)
 				break
 		return 0
 
@@ -62,21 +62,21 @@ class connection:
 			for pair in pairs:
 				print(pair)
 
-				p = multiprocessing.Process(target=connection().initiations, args= (pair,))
-				freeze_support()
-				os.fork()
-				p.start()
+				self.p = multiprocessing.Process(target=connection().initiations, args= (pair,))
+				self.freeze_support()
+				self.self.os.fork()
+				self.p.start()
 				
 				
 
 		else:
 			for pair in reloaded_pairs:
-				p = multiprocessing.Process(target=connection().initiations, args= (pair,))
-				freeze_support()
-				os.fork()
-				p.start()
-				freeze_support()
-				reloaded_pairs.pop(pair)
+				self.p = multiprocessing.Process(target=connection().initiations, args= (pair,))
+				self.freeze_support()
+				self.os.fork()
+				self.p.start()
+				self.freeze_support()
+				self.reloaded_pairs.pop(pair)
 
 
 
