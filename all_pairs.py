@@ -3,7 +3,7 @@ import requests
 import asyncpg 
 import asyncio
 import subprocess
-a = 2 
+
 class assets :
 	def pairs(self):
 		self.base_url = "https://bitmax.io"
